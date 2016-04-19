@@ -1,0 +1,71 @@
+﻿<Page
+    x:Class="NewtonContactsApp.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewtonContactsApp.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:NewtonContactsApp.Controller"
+    mc:Ignorable="d" Height="1020" Width="1102.569">
+
+    <Page.DataContext>
+        <vm:MainPageController></vm:MainPageController>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="1,0,0,0" />
+            <Setter Property="Padding" Value="25,0,0,0" />
+        </Style>
+    </Page.Resources>
+
+    <Grid Name="gridMain" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" SizeChanged="gridMain_SizeChanged">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="state_320">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="550"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="spDetails.Visibility"
+                        Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <RelativePanel>
+                <TextBox Name="textBoxSearch"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Margin="56, 56, 0, 32"></TextBox>
+                <ListView Name="contactsView"  ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact, Mode=TwoWay}" HorizontalAlignment="Stretch" 
+                          RelativePanel.Below="textBoxSearch" Margin="32, 0, 32, 24" SelectionChanged="contactsView_SelectionChanged">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="BorderBrush" Value="LightGray" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" BorderBrush="Azure">
+                                <TextBlock Name="Namebox" Text="{Binding Name}" Margin="5"></TextBlock>
+                                <TextBlock Text="{Binding PhoneNumber}" Margin="5"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            <StackPanel Name="spDetails" Orientation="Vertical" Visibility="Collapsed" RelativePanel.RightOf="contactsView" RelativePanel.Below="textBoxSearch">
+                <TextBlock Text="{Binding SelectedContact.EmailAddress, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.Address, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.PostalCode, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.CareOf, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.City, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.Country, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </StackPanel>
+            </RelativePanel>
+        </Grid>
+</Page>

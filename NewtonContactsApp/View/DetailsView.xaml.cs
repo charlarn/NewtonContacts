@@ -23,7 +23,7 @@ namespace NewtonContactsApp.View
     /// </summary>
     public sealed partial class DetailsView : Page
     {
-        private Contact selectedContact;
+        private ControlTemplate activeTemplate;
 
         public DetailsView()
         {
@@ -32,7 +32,11 @@ namespace NewtonContactsApp.View
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            selectedContact = e.Parameter as Contact;
+            dynamic param = e.Parameter;
+            activeTemplate = param.Template;
+
+            detailsView.Template = activeTemplate;
+
         }
     }
 }

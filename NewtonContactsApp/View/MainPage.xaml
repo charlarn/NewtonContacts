@@ -21,6 +21,35 @@
             <Setter Property="BorderThickness" Value="1,0,0,0" />
             <Setter Property="Padding" Value="25,0,0,0" />
         </Style>
+        <ControlTemplate x:Key="addContactTemplate">
+            <StackPanel RelativePanel.Below="pivotHeader">
+                <TextBlock Text="New contact"></TextBlock>
+                <TextBox PlaceholderText="Name"></TextBox>
+                <TextBox PlaceholderText="Address"></TextBox>
+                <TextBox PlaceholderText="CareOf"></TextBox>
+                <TextBox PlaceholderText="Postal code"></TextBox>
+                <TextBox PlaceholderText="City"></TextBox>
+                <TextBox PlaceholderText="Country"></TextBox>
+                <TextBox PlaceholderText="Phone number"></TextBox>
+                <TextBox PlaceholderText="Email Address"></TextBox>
+            </StackPanel>
+        </ControlTemplate>
+        <ControlTemplate x:Key="detailsTemplate">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding SelectedContact.EmailAddress, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.Address, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding SelectedContact.PostalCode, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <TextBlock Text="{Binding SelectedContact.CareOf, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                </StackPanel>
+                <TextBlock Text="{Binding SelectedContact.City, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding SelectedContact.Country, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <Button Content="Delete" Click="Button_Click"></Button>
+            </StackPanel>
+        </ControlTemplate>
+        <ControlTemplate x:Key="Test">
+            <TextBlock Text="TEST" Margin="100"></TextBlock>
+        </ControlTemplate>
     </Page.Resources>
 
     <Grid Name="gridMain" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -32,17 +61,15 @@
                         <AdaptiveTrigger MinWindowWidth="550"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="spDetails.Visibility"
+                        <Setter Target="detailsView.Visibility"
                         Value="Visible" />
-                        <Setter Target="contactsView.RelativePanel.AlignLeftWithPanel"
-                        Value="True" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <RelativePanel>
-                <TextBox Name="textBoxSearch"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Margin="56, 56, 0, 32"></TextBox>
+            <TextBox Name="textBoxSearch"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" Margin="32, 56, 0, 32"></TextBox>
             <ListView Name="contactsView"  ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact, Mode=TwoWay}" HorizontalAlignment="Stretch" 
                           RelativePanel.Below="textBoxSearch" Margin="32, 0, 32, 24" SelectionChanged="contactsView_SelectionChanged">
                 <ListView.ItemContainerStyle>
@@ -52,25 +79,23 @@
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical" BorderBrush="Azure">
-                                <TextBlock Text="{Binding Name}" Margin="5"></TextBlock>
-                                <TextBlock Text="{Binding PhoneNumber}" Margin="5"></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            <StackPanel Name="spDetails" Orientation="Vertical" Visibility="Collapsed" RelativePanel.RightOf="contactsView" RelativePanel.Below="textBoxSearch">
-                <TextBlock Text="{Binding SelectedContact.EmailAddress, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                <TextBlock Text="{Binding SelectedContact.Address, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding SelectedContact.PostalCode, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                <TextBlock Text="{Binding SelectedContact.CareOf, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                </StackPanel>
-                <TextBlock Text="{Binding SelectedContact.City, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                <TextBlock Text="{Binding SelectedContact.Country, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                <Button Content="Delete" Click="Button_Click"></Button>
-            </StackPanel>
-            </RelativePanel>
-        </Grid>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" BorderBrush="Azure">
+                            <TextBlock Text="{Binding Name}" Margin="5"></TextBlock>
+                            <TextBlock Text="{Binding PhoneNumber}" Margin="5"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Name="buttonAddContact" RelativePanel.RightOf="textBoxSearch" RelativePanel.AlignVerticalCenterWith="textBoxSearch" 
+                    Height="44" Width="44" ToolTipService.ToolTip="Add contact" VerticalAlignment="Bottom" Margin="0, 20, 0, 0" Click="buttonAddContact_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/icon_plus-512.png"/>
+                </Button.Background>
+            </Button>
+            <ContentControl x:Name="detailsView" Template="{StaticResource detailsTemplate}" RelativePanel.RightOf="contactsView" RelativePanel.Below="textBoxSearch" Visibility="Collapsed">
+
+            </ContentControl>
+        </RelativePanel>
+    </Grid>
 </Page>

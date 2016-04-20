@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,19 +26,37 @@ namespace NewtonContactsApp.View
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private double currentSize = 0;
+        ControlTemplate addContact, detailsTemplate;
         private VisualStateGroup visualStates;
+
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+          //  SystemNavigationManager
+                          //      .GetForCurrentView()
+                          //     .AppViewBackButtonVisibility
+                          //      = AppViewBackButtonVisibility.Visible;
+          //  SystemNavigationManager
+                 //   .GetForCurrentView()
+                  //  .BackRequested += RootHost_BackRequested;
+           // this.Loaded += RootHost_Loaded;
             ApplicationView.PreferredLaunchViewSize = new Size(1020, 640);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             visualStates = VisualStateManager.GetVisualStateGroups(gridMain).ToList()[0];
+            addContact = Resources["addContactTemplate"] as ControlTemplate;
+            detailsTemplate = Resources["detailsTemplate"] as ControlTemplate;
         }
 
         private void contactsView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-                Debug.WriteLine("Active state is null:" + visualStates.CurrentState);
+            if(visualStates.CurrentState == null)
+            {
+                Frame.Navigate(typeof(DetailsView), new { Contact = controller.SelectedContact, Template = detailsTemplate });
+            }
+            else if (detailsView.Template != detailsTemplate)
+            {
+                 detailsView.Template = detailsTemplate;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -51,6 +70,12 @@ namespace NewtonContactsApp.View
             var scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             var size = new Size(bounds.Width * scaleFactor, bounds.Height * scaleFactor);
             return size.Width;
+        }
+
+        private void buttonAddContact_Click(object sender, RoutedEventArgs e)
+        {
+            if (detailsView.Template != addContact)
+                detailsView.Template = addContact;
         }
     }
 }

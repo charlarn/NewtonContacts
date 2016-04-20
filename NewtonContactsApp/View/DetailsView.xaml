@@ -5,9 +5,22 @@
     xmlns:local="using:NewtonContactsApp.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:NewtonContactsApp.Controller"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    </Grid>
+    <Page.DataContext>
+        <vm:MainPageController x:Name="controller"></vm:MainPageController>
+    </Page.DataContext>
+
+    <Page.TopAppBar>
+        <CommandBar Name="commandBar">
+            <CommandBar.Content>
+                <Button x:Name="buttonBack"></Button>
+            </CommandBar.Content>
+        </CommandBar>
+    </Page.TopAppBar>
+    <ContentControl x:Name="detailsView">
+        
+    </ContentControl>
 </Page>

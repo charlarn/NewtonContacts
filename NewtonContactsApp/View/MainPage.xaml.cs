@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,36 +26,31 @@ namespace NewtonContactsApp.View
     public sealed partial class MainPage : Page
     {
         private double currentSize = 0;
+        private VisualStateGroup visualStates;
         public MainPage()
         {
             this.InitializeComponent();
             ApplicationView.PreferredLaunchViewSize = new Size(1020, 640);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            this.SizeChanged += WindowSizeChanged;
+            visualStates = VisualStateManager.GetVisualStateGroups(gridMain).ToList()[0];
         }
 
         private void contactsView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (gridMain.ActualWidth < 600)
-            {
-                Frame.Navigate(typeof(DetailsView), contactsView.SelectedItem);
-            }
-            else
-            {
-                VisualStateManager.GetVisualStateGroups(this);
-                Debug.WriteLine("big:" + gridMain.ActualWidth);
-            }
+                Debug.WriteLine("Active state is null:" + visualStates.CurrentState);
         }
 
-        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-   
+            controller.Contacts.Remove(controller.SelectedContact);
         }
 
-        private void gridMain_SizeChanged(object sender, SizeChangedEventArgs e)
+        public static double ScreenRezWidth()
         {
-            currentSize = e.NewSize.Width;
-            Debug.WriteLine("C: " + currentSize);
+            var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+            var scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+            var size = new Size(bounds.Width * scaleFactor, bounds.Height * scaleFactor);
+            return size.Width;
         }
     }
 }

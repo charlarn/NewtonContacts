@@ -1,6 +1,7 @@
 ﻿using NewtonContactsApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace NewtonContactsApp.Controller
     class MainPageController : INotifyPropertyChanged
     {
         IContactsRepository repo;
-        public IList<Contact> Contacts { get; set; }
+      //  public IList<Contact> Contacts { get; set; }
+        public ObservableCollection<Contact> Contacts { get; set; }
 
         private Contact selectedContact;
 
@@ -34,14 +36,17 @@ namespace NewtonContactsApp.Controller
         public MainPageController()
         {
             repo = new MockContactsRepo();
-            Contacts = repo.GetAll();
+            Contacts = new ObservableCollection<Contact>();
+            repo.GetAll().ToList().ForEach(Contacts.Add);
             SelectedContact = Contacts.FirstOrDefault();
         }
 
-        private void OnPropertyChanged(string property)
+        public void OnPropertyChanged(string property)
         {
             if (PropertyChanged != null)
+            {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
         }
     }
 }

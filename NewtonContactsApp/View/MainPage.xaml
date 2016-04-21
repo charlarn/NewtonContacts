@@ -32,6 +32,7 @@
                 <TextBox PlaceholderText="Country"></TextBox>
                 <TextBox PlaceholderText="Phone number"></TextBox>
                 <TextBox PlaceholderText="Email Address"></TextBox>
+                <Button Command="{Binding buttonCommand}" Content="Save contact"></Button>
             </StackPanel>
         </ControlTemplate>
         <ControlTemplate x:Key="detailsTemplate">

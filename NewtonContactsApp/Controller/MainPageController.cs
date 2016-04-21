@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace NewtonContactsApp.Controller
 {
@@ -15,6 +17,7 @@ namespace NewtonContactsApp.Controller
         IContactsRepository repo;
       //  public IList<Contact> Contacts { get; set; }
         public ObservableCollection<Contact> Contacts { get; set; }
+        public ButtonCommand buttonCommand { get; set; }
 
         private Contact selectedContact;
 
@@ -36,9 +39,16 @@ namespace NewtonContactsApp.Controller
         public MainPageController()
         {
             repo = new MockContactsRepo();
+            buttonCommand = new ButtonCommand();
+            buttonCommand.DoSomething += SaveContact;
             Contacts = new ObservableCollection<Contact>();
             repo.GetAll().ToList().ForEach(Contacts.Add);
             SelectedContact = Contacts.FirstOrDefault();
+        }
+
+        private void SaveContact(string obj)
+        {
+            Debug.WriteLine("SAVING CONTACT");
         }
 
         public void OnPropertyChanged(string property)
